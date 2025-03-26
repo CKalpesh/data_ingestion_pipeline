@@ -1,6 +1,6 @@
 
-const { EventEmitter } = require('events');
-const { logger } = require('./logger');
+import { EventEmitter } from 'events';
+import { logger } from './logger.js';
 
 // Simple in-memory message queue implementation
 // In production, this would be replaced with a real message broker
@@ -115,5 +115,5 @@ class MessageQueue extends EventEmitter {
         return stats;
     }
 }
-
-module.exports = new MessageQueue();
+export default MessageQueue
+// export { MessageQueue };

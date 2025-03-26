@@ -1,5 +1,4 @@
-
-const crypto = require('crypto');
+import { crypto } from 'crypto';
 
 // Generate an idempotency key from the data
 const generateIdempotencyKey = (data) => {
@@ -30,7 +29,7 @@ const findDuplicates = (records) => {
     return duplicates;
 };
 
-module.exports = {
+export {
     generateIdempotencyKey,
     findDuplicates
 };

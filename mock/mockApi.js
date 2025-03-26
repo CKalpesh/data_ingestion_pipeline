@@ -1,6 +1,5 @@
-
-const express = require('express');
-const { logger } = require('../src/core/logger');
+import express from 'express';
+import { logger } from '../src/core/logger.js';
 
 const startMockApiServer = (port = 3001) => {
     const app = express();
@@ -49,4 +48,4 @@ const startMockApiServer = (port = 3001) => {
     return server;
 };
 
-module.exports = { startMockApiServer };
+export { startMockApiServer };

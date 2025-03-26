@@ -1,11 +1,12 @@
+import pkg from 'csv-parser';
+const { csvParser: csv } = pkg;
+import { Readable } from 'stream';
+import { logger, withCorrelation } from '../core/logger.js';
+import datastore from '../core/datastore.js';
+import { validateCsvRow } from '../utils/validation.js';
+import MessageQueue from '../core/messageQueue.js';
 
-const csv = require('csv-parser');
-const { Readable } = require('stream');
-const { logger, withCorrelation } = require('../core/logger');
-const datastore = require('../core/datastore');
-const messageQueue = require('../core/messageQueue');
-const { validateCsvRow } = require('../utils/validation');
-
+const messageQueue = new MessageQueue();
 // Process CSV file
 const processCsvFile = async (fileBuffer, fileName, correlationId) => {
     const log = withCorrelation(correlationId);
@@ -26,7 +27,7 @@ const processCsvFile = async (fileBuffer, fileName, correlationId) => {
         // Validate results
         const validRecords = [];
         const invalidRecords = [];
- 
+
         results.forEach(row => {
             const validation = validateCsvRow(row);
             if (validation.valid) {
@@ -126,8 +127,5 @@ const storeCsvData = async (data, correlationId) => {
     }
 };
 
-module.exports = {
-    processCsvFile,
-    parseCsvBuffer,
-    storeCsvData
-};
+// Export with ES6 syntax
+export { processCsvFile, parseCsvBuffer, storeCsvData };

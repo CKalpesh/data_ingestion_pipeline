@@ -1,7 +1,6 @@
-
-const { v4: uuidv4 } = require('uuid');
-const { processCsvFile } = require('../../src/services/fileIngestion');
-const { logger, withCorrelation } = require('../../src/core/logger');
+import { v4 as uuidv4 } from 'uuid';
+import { logger, withCorrelation } from './core/logger.js';
+import { processCsvFile } from './services/fileIngestion.js';
 
 /**
  * Cloud Function to ingest data from CSV file uploads

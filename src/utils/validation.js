@@ -1,4 +1,4 @@
-const { logger } = require("../core/logger");
+import { logger } from "../core/logger.js";
 
 const validateApiData = (data) => {
     if (!Array.isArray(data)) {
@@ -40,7 +40,7 @@ const validateCsvRow = (row) => {
     };
 };
 
-module.exports = {
+export {
     validateApiData,
     validateCsvRow
 };

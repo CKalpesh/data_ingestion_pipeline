@@ -1,7 +1,7 @@
 
-const { v4: uuidv4 } = require('uuid');
-const { processApiData } = require('../../src/services/apiIngestion');
-const { logger, withCorrelation } = require('../../src/core/logger');
+import { v4 as uuidv4 } from 'uuid';
+import { logger, withCorrelation } from './core/logger.js';
+import { processApiData } from './services/apiIngestion.js';
 
 /**
  * Cloud Function to ingest data from REST API
