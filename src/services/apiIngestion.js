@@ -1,10 +1,10 @@
+import axios from 'axios';
+import { logger, withCorrelation } from '../core/logger.js';
+import datastore from '../core/datastore.js';
+import { validateApiData } from '../utils/validation.js';
+import MessageQueue from '../core/messageQueue.js';
 
-const axios = require('axios');
-const { logger, withCorrelation } = require('../core/logger');
-const datastore = require('../core/datastore');
-const messageQueue = require('../core/messageQueue');
-const { validateApiData } = require('../utils/validation');
-
+const messageQueue = new MessageQueue();
 // API client with retry logic
 class ApiClient {
     constructor(baseUrl, maxRetries = 3, retryDelay = 1000) {
@@ -123,8 +123,10 @@ const storeApiData = async (data, correlationId) => {
     }
 };
 
-module.exports = {
-    ApiClient,
-    processApiData,
-    storeApiData
-};
+export { ApiClient, processApiData, storeApiData };
+
+// module.exports = {
+//     ApiClient,
+//     processApiData,
+//     storeApiData
+// };

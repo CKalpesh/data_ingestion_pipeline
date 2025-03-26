@@ -1,14 +1,16 @@
+// Import below functions in ES module scope
 
-const { v4: uuidv4 } = require('uuid');
-const { logger, withCorrelation } = require('./core/logger');
-const messageQueue = require('./core/messageQueue');
-const datastore = require('./core/datastore');
-const { storeApiData } = require('./services/apiIngestion');
-const { storeCsvData } = require('./services/fileIngestion');
-const { storeQueueData } = require('./services/queueIngestion');
+import { v4 as uuidv4 } from 'uuid';
+import { logger, withCorrelation } from './core/logger.js';
+import datastore from './core/datastore.js';
+import { storeApiData } from './services/apiIngestion.js';
+import { storeCsvData } from './services/fileIngestion.js';
+import { storeQueueData } from './services/queueIngestion.js';
+import MessageQueue from './core/messageQueue.js';
 
+const messageQueue = new MessageQueue();
 // Set up message queue consumers
-const setupConsumers = () => {
+export const setupConsumers = () => {
     // Data ingestion queue - handles all sources
     messageQueue.subscribe('data-ingestion', async (message) => {
         const correlationId = message.metadata.correlationId || uuidv4();
@@ -45,7 +47,7 @@ const setupConsumers = () => {
     logger.info('Message queue consumers initialized');
 };
 
-const initialize = async () => {
+export const initialize = async () => {
     logger.info('Initializing data ingestion system');
 
     // Create necessary queues
@@ -62,10 +64,13 @@ const initialize = async () => {
     };
 };
 
+// Export logger from here
+export { logger, messageQueue, datastore };
+
 // Export the initialization function and other components
-module.exports = {
-    initialize,
-    messageQueue,
-    datastore,
-    logger
-};
+// module.exports = {
+//     initialize,
+//     messageQueue,
+//     datastore,
+//     logger
+// };

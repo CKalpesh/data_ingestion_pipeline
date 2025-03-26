@@ -1,26 +1,28 @@
-const express = require('express');
-const multer = require('multer');
-const { v4: uuidv4 } = require('uuid');
-const { initialize, logger } = require('./src/index');
-const { processApiData } = require('./src/services/apiIngestion');
-const { processCsvFile } = require('./src/services/fileIngestion');
-const { processQueueMessage } = require('./src/services/queueIngestion');
-const { startMockApiServer } = require('./mock/mockApi');
-const { startMockQueuePublisher } = require('./mock/mockQueue');
+import express, { json, urlencoded } from 'express';
+import multer, { memoryStorage } from 'multer';
+import { v4 as uuidv4 } from 'uuid';
+import { logger, initialize } from './src/index.js';
+import { processApiData } from './src/services/apiIngestion.js';
+import { processCsvFile } from './src/services/fileIngestion.js';
+import { processQueueMessage } from './src/services/queueIngestion.js';
+import { startMockApiServer } from './mock/mockApi.js';
+import { startMockQueuePublisher } from './mock/mockQueue.js';
+import { http } from "@google-cloud/functions-framework";
+
 
 // Initialize Express app
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 // Set up multer for file uploads
 const upload = multer({
-    storage: multer.memoryStorage(),
+    storage: memoryStorage(),
     limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
 });
 
 // Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(json());
+app.use(urlencoded({ extended: true }));
 
 // Initialize system
 let system;
@@ -151,34 +153,28 @@ app.get('/stats', async (req, res) => {
     }
 });
 
-// Start server
-const startServer = async () => {
-    // Initialize system
-    await setupSystem();
+// --- Local Development Server (Optional) ---
+if (process.env.NODE_ENV !== 'production' && !process.env.FUNCTION_TARGET) {
+    (async () => {
+        await setupSystem();
 
-    // Start mock servers
-    const mockApi = startMockApiServer();
-    const mockQueue = startMockQueuePublisher();
+        // Start mock servers (local only)
+        startMockApiServer();
+        startMockQueuePublisher();
 
-    // Start Express server
-    app.listen(port, () => {
-        logger.info(`Server running at http://localhost:${port}`);
-        logger.info('Available endpoints:');
-        logger.info('  POST /api/ingest - Ingest data from API');
-        logger.info('  POST /file/ingest - Ingest data from CSV file');
-        logger.info('  POST /queue/ingest - Ingest data from queue');
-        logger.info('  GET /stats - Get system statistics');
+        // Start Express server (local only)
+        app.listen(port, () => {
+            logger.info(`Local server running at http://localhost:${port}`);
+        });
+    })().catch(err => {
+        logger.error("Local server failed to start", err);
+        process.exit(1);
     });
-};
+}
 
-// Handle graceful shutdown
-process.on('SIGINT', () => {
-    logger.info('Shutting down server...');
-    process.exit();
-});
-
-// Start application
-startServer().catch(error => {
-    logger.error('Failed to start server', { error: error.message });
-    process.exit(1);
+export const api = http("api", async (req, res) => {
+    // Initialize system if not already done (GCF may reuse instances)
+    if (!system) await setupSystem();
+    // Forward request to Express
+    app(req, res);
 });

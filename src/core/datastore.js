@@ -1,5 +1,5 @@
 
-const { logger } = require('./logger');
+import { logger } from './logger.js';
 
 // In-memory datastore for demo purposes
 // In production, this would be a database client
@@ -75,5 +75,4 @@ class DataStore {
         logger.info('Datastore cleared');
     }
 }
-
-module.exports = new DataStore();
+export default DataStore;

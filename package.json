@@ -1,0 +1,27 @@
+{
+    "name": "serverless-data-ingestion",
+    "version": "1.0.0",
+    "description": "Serverless data ingestion system",
+    "main": "app.js",
+    "type": "module",
+    "scripts": {
+        "start": "npx @google-cloud/functions-framework --target=api",
+        "deploy": "gcloud functions deploy api --runtime nodejs22 --trigger-http --allow-unauthenticated --entry-point=api"
+    },
+    "dependencies": {
+        "axios": "^0.27.2",
+        "csv-parser": "^3.0.0",
+        "express": "^4.21.2",
+        "multer": "^1.4.5-lts.1",
+        "node": "^22.14.0",
+        "serverless-http": "^3.2.0",
+        "uuid": "^9.0.0",
+        "winston": "^3.8.1"
+    },
+    "devDependencies": {
+        "@google-cloud/functions-framework": "^3.4.6",
+        "check-dependencies": "^2.0.0",
+        "deps-ok": "^1.4.1",
+        "jest": "^28.1.3"
+    }
+}

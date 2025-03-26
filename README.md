@@ -1,6 +1,6 @@
 # Serverless Data Ingestion System
 
-This project implements a serverless data ingestion system that can process data from multiple sources including REST APIs, CSV files, and message queues.
+This project implements a serverless data ingestion system that can process data from multiple sources including REST APIs, CSV files, and message queues. The system is designed to be fault-tolerant, scalable, and follows serverless architecture principles.
 
 ## Architecture
 

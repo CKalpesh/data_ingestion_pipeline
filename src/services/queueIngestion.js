@@ -1,8 +1,8 @@
+import { logger, withCorrelation } from '../core/logger.js';
+import datastore from '../core/datastore.js';
+import MessageQueue from '../core/messageQueue.js';
 
-const { logger, withCorrelation } = require('../core/logger');
-const datastore = require('../core/datastore');
-const messageQueue = require('../core/messageQueue');
-
+const messageQueue = new MessageQueue();
 // Process messages from external queue
 const processQueueMessage = async (message, correlationId) => {
     const log = withCorrelation(correlationId);
@@ -55,7 +55,7 @@ const storeQueueData = async (data, correlationId) => {
     }
 };
 
-module.exports = {
+export {
     processQueueMessage,
     storeQueueData
 };

@@ -1,4 +1,4 @@
-const winston = require('winston');
+import winston from 'winston';
 
 // Configure logger
 const logger = winston.createLogger({
@@ -23,4 +23,4 @@ const withCorrelation = (correlationId) => {
     };
 };
 
-module.exports = { logger, withCorrelation };
+export { logger, withCorrelation };

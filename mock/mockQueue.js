@@ -1,6 +1,7 @@
+import { logger } from '../src/core/logger.js';
+import MessageQueue from '../src/core/messageQueue.js';
 
-const { logger } = require('../src/core/logger');
-const messageQueue = require('../src/core/messageQueue');
+const messageQueue = new MessageQueue();
 
 const startMockQueuePublisher = (interval = 5000) => {
     logger.info('Starting mock queue publisher');
@@ -41,4 +42,4 @@ const startMockQueuePublisher = (interval = 5000) => {
     };
 };
 
-module.exports = { startMockQueuePublisher };
+export { startMockQueuePublisher };

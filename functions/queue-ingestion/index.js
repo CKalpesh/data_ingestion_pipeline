@@ -1,7 +1,7 @@
+import { v4 as uuidv4 } from 'uuid';
+import { logger, withCorrelation } from './core/logger.js';
+import { processQueueMessage } from './services/queueIngestion.js';
 
-const { v4: uuidv4 } = require('uuid');
-const { processQueueMessage } = require('../../src/services/queueIngestion');
-const { logger, withCorrelation } = require('../../src/core/logger');
 
 /**
  * Cloud Function to process messages from external queue
